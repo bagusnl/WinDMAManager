@@ -1,5 +1,4 @@
-﻿
-using WinDMAManager.Helper;
+﻿using WinDMAManager.Helper;
 using WinDMAManager.Helper.PCIDevices;
 using WinDMAManager.List;
 
@@ -9,6 +8,7 @@ namespace WinDMAManager
     {
         private static bool? _isInitialized;
         
+        // ReSharper disable once FunctionRecursiveOnAllPaths
         private static void Main()
         {
             // Run initialization if flag is null
@@ -30,12 +30,12 @@ namespace WinDMAManager
             switch (input.ToUpper())
             {
                 case "A":
-                    // TODO: implement add all to allow
-                    throw new NotImplementedException();
+                    RegistryHelper.AddAllToAllowList();
+                    Deinitialize();
                     break;
                 case "D":
-                    // TODO: implement add all to unallow
-                    throw new NotImplementedException();
+                    RegistryHelper.AddAllToUnallowList();
+                    Deinitialize();
                     break;
                 case "Q":
                     Console.WriteLine("Are you sure? [Y/N]");
@@ -56,7 +56,7 @@ namespace WinDMAManager
                     }
                     break;
                 case "X":
-                    Environment.Exit(0);
+                    Exit();
                     break;
                 default:
                     if (int.TryParse(input, out int val))
@@ -69,6 +69,11 @@ namespace WinDMAManager
             }
 
             Main();
+        }
+
+        private static void Exit()
+        {
+            Environment.Exit(0);
         }
 
         private static bool Initialize()

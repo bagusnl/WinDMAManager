@@ -6,7 +6,7 @@ using static CosmosKey.Utils.TokenManipulator;
 
 namespace WinDMAManager.Helper;
 
-public class RegistryHelper
+public static class RegistryHelper
 {
     public const string AllowedDMA =
         @"SYSTEM\CurrentControlSet\Control\DmaSecurity\AllowedBuses";
@@ -167,5 +167,55 @@ public class RegistryHelper
             key.DeleteValue(valueName);
             Console.WriteLine($"Deleted {valueName}");
         }
+    }
+
+    public static void AddAllToAllowList()
+    {
+        List<PCIDeviceList> pciDevList = PCIDevice.PciDevice;
+        
+        foreach (var dev in pciDevList)
+        {
+            try
+            {
+                var allowList =
+                    Registry.LocalMachine.OpenSubKey(AllowedDMA, RegistryKeyPermissionCheck.ReadWriteSubTree);
+
+                var desc = dev.Description;
+                var devId = dev.DeviceID;
+                allowList!.SetValue(desc, devId, RegistryValueKind.String);
+                Console.WriteLine($"Added {desc} to allowed DMA list!");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Failed to add {dev.Description} to Allowed DMA list!\r\n{e}");
+            }
+        }
+        Console.WriteLine("Finished adding all devices to DMA allow list! Press any key to continue...");
+        Console.ReadKey();
+    }
+    
+    public static void AddAllToUnallowList()
+    {
+        List<PCIDeviceList> pciDevList = PCIDevice.PciDevice;
+        
+        foreach (var dev in pciDevList)
+        {
+            try
+            {
+                var unallowList =
+                    Registry.LocalMachine.OpenSubKey(UnallowedDMA, RegistryKeyPermissionCheck.ReadWriteSubTree);
+
+                var desc = dev.Description;
+                var devId = dev.DeviceID;
+                unallowList!.SetValue(desc, devId, RegistryValueKind.String);
+                Console.WriteLine($"Added {desc} to allowed DMA list!");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Failed to add {dev.Description} to Allowed DMA list!\r\n{e}");
+            }
+        }
+        Console.WriteLine("Finished adding all devices to DMA allow list! Press any key to continue...");
+        Console.ReadKey();
     }
 }
