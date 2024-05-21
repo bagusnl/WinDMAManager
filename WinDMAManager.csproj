@@ -5,6 +5,7 @@
         <TargetFramework>net8.0-windows</TargetFramework>
         <Platform>win-64</Platform>
         <SupportedOSPlatform>windows</SupportedOSPlatform>
+        <AssemblyVersion>0.0.1</AssemblyVersion>
 
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -17,5 +18,12 @@
     <ItemGroup>
       <PackageReference Include="System.Management" Version="8.0.0" />
     </ItemGroup>
+
+	<Target Name="ConfigureTrimming" BeforeTargets="PrepareForILLink">
+		<ItemGroup>
+			<!-- Descriptor for all classes that cannot be trimmed -->
+			<TrimmerRootDescriptor Include="NonTrimmableRoots.xml" />
+		</ItemGroup>
+	</Target>
 
 </Project>

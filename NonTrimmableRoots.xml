@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<linker>
+	<assembly fullname="System.Management">
+		<namespace fullname="System.Management" preserve="all"/>
+		<type fullname="System.Management.ManagementObject" preserve="all"/>
+	</assembly>
+	<assembly fullname="System.CodeDom" preserve="all"/>
+</linker>
