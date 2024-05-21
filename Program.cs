@@ -7,11 +7,11 @@ namespace WinDMAManager
 {
     internal static class Program
     {
-        public static bool? _isInitialized;
+        private static bool? _isInitialized;
         
         private static int Main()
         {
-            // Run initialization once
+            // Run initialization if flag is null
             _isInitialized ??= Initialize();
             if ((bool)!_isInitialized)
             {
@@ -76,6 +76,15 @@ namespace WinDMAManager
                 return false;
             }
         }
+
+        private static void Deinitialize()
+        {
+            AllowedDMA.DMADevice.Clear();
+            UnallowedDMA.DMADevice.Clear();
+            PCIDevice.PciDevice.Clear();
+
+            _isInitialized = null;
+        }
         private static string SelectOption()
         {
             Console.WriteLine("Options:\r\n\t" +
@@ -109,11 +118,11 @@ namespace WinDMAManager
             {
                 case "A":
                     RegistryHelper.AddToAllowList(devNum);
-                    _isInitialized = null;
+                    Deinitialize();
                     break;
                 case "D":
                     RegistryHelper.AddToUnallowList(devNum);
-                    _isInitialized = null;
+                    Deinitialize();
                     break;
             }
             
