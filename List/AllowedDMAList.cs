@@ -1,4 +1,6 @@
-﻿namespace WinDMAManager.List
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+namespace WinDMAManager.List
 {
     public class AllowedDMAList
     {

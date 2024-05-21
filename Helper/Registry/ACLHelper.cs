@@ -1,10 +1,9 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 // https://cosmoskey.blogspot.com/2010/07/setting-owner-on-acl-in-powershell.html
 namespace CosmosKey.Utils
 {
-    public class TokenManipulator
+    public static class TokenManipulator
     {
         [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
         private static extern bool AdjustTokenPrivileges(IntPtr htok, bool disall,
@@ -26,7 +25,7 @@ namespace CosmosKey.Utils
 
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        internal struct TokPriv1Luid
+        private struct TokPriv1Luid
         {
             public int Count;
             public long Luid;

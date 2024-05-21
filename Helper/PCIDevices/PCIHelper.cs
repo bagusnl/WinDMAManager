@@ -3,7 +3,7 @@ using System.Management;
 
 namespace WinDMAManager.Helper.PCIDevices;
 
-public class PCIHelper
+public static class PCIHelper
 {
     // https://stackoverflow.com/questions/11966684/how-to-get-the-device-id-of-pci-devices
     public static void SearchAllPCIDevice()
