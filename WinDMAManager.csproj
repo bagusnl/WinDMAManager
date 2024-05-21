@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <Platform>win-64</Platform>
+        <SupportedOSPlatform>windows</SupportedOSPlatform>
+
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        
+        <EntryPointExe>Main</EntryPointExe>
+        <InvariantGlobalization>true</InvariantGlobalization>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Management" Version="8.0.0" />
+    </ItemGroup>
+
+</Project>
