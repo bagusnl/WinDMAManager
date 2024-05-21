@@ -10,7 +10,8 @@
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        
+
+		<ApplicationManifest>app.manifest</ApplicationManifest>
         <EntryPointExe>Main</EntryPointExe>
         <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
