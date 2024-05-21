@@ -21,6 +21,7 @@ public class RegistryHelper
         {
             // Manipulate token to gain access
             AddPrivilege(SE_TAKE_OWNERSHIP_NAME);
+            AddPrivilege(SE_RESTORE_NAME);
             
             var key = Registry.LocalMachine.OpenSubKey(reg, RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.TakeOwnership);
             if (key == null) throw new NullReferenceException("Key is uninitialized!");

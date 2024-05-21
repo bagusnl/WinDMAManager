@@ -9,7 +9,7 @@ namespace WinDMAManager
     {
         private static bool? _isInitialized;
         
-        private static int Main()
+        private static void Main()
         {
             // Run initialization if flag is null
             _isInitialized ??= Initialize();
@@ -19,7 +19,10 @@ namespace WinDMAManager
                 Environment.Exit(100);
             }
             
-            Console.WriteLine("Match List:\r\n\tY = In allowed list\r\n\tN = In unallowed list\r\n\t? = Not found in any list");
+            Console.WriteLine("Match List:\r\n\t" +
+                              "Y = In allowed list\r\n\t" +
+                              "N = In unallowed list\r\n\t" +
+                              "? = Not found in any list");
             foreach(var l in PCIDevice.PciDevice ) Console.WriteLine($"Found Device #{l.N.ToString("D3")}, Match = {l.Match!}, {l.DeviceID}, {l.Description}");
             Console.WriteLine();
 
@@ -34,6 +37,24 @@ namespace WinDMAManager
                     // TODO: implement add all to unallow
                     throw new NotImplementedException();
                     break;
+                case "Q":
+                    Console.WriteLine("Are you sure? [Y/N]");
+                    var confA = Console.ReadLine()!.ToUpper();
+                    if (confA == "Y")
+                    {
+                        RegistryHelper.ResetAllowList();
+                        Deinitialize();
+                    }
+                    break;
+                case "E":
+                    Console.WriteLine("Are you sure? [Y/N]");
+                    var confD = Console.ReadLine()!.ToUpper();
+                    if (confD == "Y")
+                    {
+                        RegistryHelper.ResetUnallowList();
+                        Deinitialize();
+                    }
+                    break;
                 case "X":
                     Environment.Exit(0);
                     break;
@@ -47,7 +68,7 @@ namespace WinDMAManager
                     break;
             }
 
-            return 0;
+            Main();
         }
 
         private static bool Initialize()
@@ -58,8 +79,12 @@ namespace WinDMAManager
                 PCIHelper.SearchAllPCIDevice();
             
                 // Takeover DMA registry
-                RegistryHelper.TakeOwnership(RegistryHelper.AllowedDMA);
-                RegistryHelper.TakeOwnership(RegistryHelper.UnallowedDMA);
+                var takeOwnAllowDMA = RegistryHelper.TakeOwnership(RegistryHelper.AllowedDMA);
+                if (takeOwnAllowDMA != Task.CompletedTask)
+                    throw new ApplicationException("Failed to take ownership on AllowedDMA registry!");
+                var takeOwnUnallowDMA = RegistryHelper.TakeOwnership(RegistryHelper.UnallowedDMA);
+                if (takeOwnUnallowDMA != Task.CompletedTask)
+                    throw new ApplicationException("Failed to take ownership on UnallowedDMA registry!");
             
                 // Initialize DMA list
                 RegistryHelper.ListAllowedDMA();
@@ -85,21 +110,18 @@ namespace WinDMAManager
 
             _isInitialized = null;
         }
+        
         private static string SelectOption()
         {
             Console.WriteLine("Options:\r\n\t" +
                               "A = Add all to allow list\r\n\t" +
                               "D = Add all to disallow list\r\n\t" +
+                              "Q = Reset allowed DMA list\r\n\t" +
+                              "E = Reset unallowed DMA list\r\n\t" +
                               "X = Exit program\r\n\t" +
                               "Type device # to modify specific device in the list");
             Console.WriteLine("Input:");
-            var read = Console.ReadLine()!;
-            if (int.TryParse(read, out int value))
-            {
-                return value.ToString();
-            }
-
-            return read;
+            return Console.ReadLine()!;
         }
 
         private static void ModifyDevice(int devNum)
